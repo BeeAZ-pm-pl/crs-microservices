@@ -1,0 +1,3 @@
+vn\edu\crs\apigateway\filter\ApiKeyFilter.class
+vn\edu\crs\apigateway\filter\AuthHeaderFilter.class
+vn\edu\crs\apigateway\ApiGatewayApplication.class
