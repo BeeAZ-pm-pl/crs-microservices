@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  mysql-auth:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: auth_db
+    ports:
+      - "3307:3306"
+
+  mysql-course:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: course_db
+    ports:
+      - "3308:3306"
+
+  mysql-registration:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: registration_db
+    ports:
+      - "3309:3306"
+
+  auth-service:
+    build: ./auth-service
+    depends_on:
+      - mysql-auth
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-auth:3306/auth_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      JWT_SECRET: CRS-Microservices-Secret-Key-Nam-3-Hoc-Ky-2026-Doi-Trong-Thuc-Te
+    ports:
+      - "8081:8081"
+
+  course-service:
+    build: ./course-service
+    depends_on:
+      - mysql-course
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-course:3306/course_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      JWT_SECRET: CRS-Microservices-Secret-Key-Nam-3-Hoc-Ky-2026-Doi-Trong-Thuc-Te
+    ports:
+      - "8082:8082"
+
+  registration-service:
+    build: ./registration-service
+    depends_on:
+      - mysql-registration
+      - course-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-registration:3306/registration_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      JWT_SECRET: CRS-Microservices-Secret-Key-Nam-3-Hoc-Ky-2026-Doi-Trong-Thuc-Te
+      COURSE_SERVICE_BASE_URL: http://course-service:8082
+    ports:
+      - "8083:8083"
+
+  api-gateway:
+    build: ./api-gateway
+    depends_on:
+      - auth-service
+      - course-service
+      - registration-service
+    environment:
+      AUTH_SERVICE_URL: http://auth-service:8081
+      COURSE_SERVICE_URL: http://course-service:8082
+      REGISTRATION_SERVICE_URL: http://registration-service:8083
+    ports:
+      - "8080:8080"
