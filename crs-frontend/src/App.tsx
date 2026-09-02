@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import CoursesPage from './pages/CoursesPage';
 import AdminCoursesPage from './pages/AdminCoursesPage';
 import RegisterCoursePage from './pages/RegisterCoursePage';
+import MyRegistrationsPage from './pages/MyRegistrationsPage';
 import Navbar from './components/Navbar';
 
 function App() {
@@ -29,6 +30,14 @@ function App() {
             element={
               <ProtectedRoute requiredRole="STUDENT">
                 <RegisterCoursePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-registrations"
+            element={
+              <ProtectedRoute requiredRole="STUDENT">
+                <MyRegistrationsPage />
               </ProtectedRoute>
             }
           />
