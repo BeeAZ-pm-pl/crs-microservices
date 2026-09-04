@@ -57,6 +57,13 @@ export default function ApiKeysPage() {
     }
   };
 
+  const handleCopy = () => {
+    if (newKeyValue) {
+      navigator.clipboard.writeText(newKeyValue);
+      alert('Đã sao chép API Key vào bộ nhớ tạm!');
+    }
+  };
+
   return (
     <div style={{ padding: 24, maxWidth: 800, margin: '0 auto' }}>
       <h1>Quản lý API Key đối tác</h1>
@@ -79,9 +86,14 @@ export default function ApiKeysPage() {
       </form>
 
       {newKeyValue && (
-        <div style={{ background: '#fef9c3', padding: 12, borderRadius: 8, marginBottom: 24 }}>
-          <strong>Key vừa tạo (chỉ hiển thị 1 lần, hãy lưu lại ngay):</strong>
-          <pre style={{ userSelect: 'all' }}>{newKeyValue}</pre>
+        <div style={{ background: '#fef9c3', padding: 12, borderRadius: 8, marginBottom: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <strong>Key vừa tạo (chỉ hiển thị 1 lần, hãy lưu lại ngay):</strong>
+            <pre style={{ userSelect: 'all', margin: '4px 0 0 0' }}>{newKeyValue}</pre>
+          </div>
+          <button type="button" onClick={handleCopy}>
+            Sao chép
+          </button>
         </div>
       )}
 
