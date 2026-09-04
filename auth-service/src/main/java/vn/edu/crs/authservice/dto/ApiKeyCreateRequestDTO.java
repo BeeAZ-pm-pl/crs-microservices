@@ -6,10 +6,10 @@ import lombok.Data;
 @Data
 public class ApiKeyCreateRequestDTO {
 
-    @NotBlank(message = "Ten doi tac khong duoc de trong")
+    @NotBlank(message = "Tên đối tác không được để trống")
     private String ownerName;
 
-    @NotBlank(message = "Danh sach scope khong duoc de trong")
+    @NotBlank(message = "Danh sách scope không được để trống")
     private String scopes;
 
     private Integer validDays;

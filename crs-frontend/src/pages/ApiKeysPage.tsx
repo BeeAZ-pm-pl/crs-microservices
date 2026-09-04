@@ -17,7 +17,7 @@ export default function ApiKeysPage() {
     setLoading(true);
     getApiKeys()
       .then((res) => setKeys(res.data))
-      .catch(() => setError('Khong tai duoc danh sach API Key.'))
+      .catch(() => setError('Không tải được danh sách API Key.'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -42,60 +42,60 @@ export default function ApiKeysPage() {
       if (axios.isAxiosError<ApiErrorResponse>(err) && err.response?.data?.message) {
         setError(err.response.data.message);
       } else {
-        setError('Cap API Key khong thanh cong.');
+        setError('Cấp API Key không thành công.');
       }
     }
   };
 
   const handleRevoke = async (key: ApiKey) => {
-    if (!window.confirm(`Thu hoi API Key cua "${key.ownerName}"?`)) return;
+    if (!window.confirm(`Thu hồi API Key của "${key.ownerName}"?`)) return;
     try {
       await revokeApiKey(key.id);
       loadKeys();
     } catch {
-      alert('Thu hoi khong thanh cong.');
+      alert('Thu hồi không thành công.');
     }
   };
 
   return (
     <div style={{ padding: 24, maxWidth: 800, margin: '0 auto' }}>
-      <h1>Quan ly API Key doi tac</h1>
+      <h1>Quản lý API Key đối tác</h1>
       <form onSubmit={handleCreate} style={{ border: '1px solid #ddd', padding: 16, borderRadius: 8, marginBottom: 24 }}>
-        <h3>Cap API Key moi</h3>
+        <h3>Cấp API Key mới</h3>
         <div style={{ marginBottom: 8 }}>
-          <label>Ten doi tac</label><br />
+          <label>Tên đối tác</label><br />
           <input value={ownerName} onChange={(e) => setOwnerName(e.target.value)} required />
         </div>
         <div style={{ marginBottom: 8 }}>
-          <label>Scopes (cach nhau boi dau phay)</label><br />
+          <label>Scopes (cách nhau bởi dấu phẩy)</label><br />
           <input value={scopes} onChange={(e) => setScopes(e.target.value)} required />
         </div>
         <div style={{ marginBottom: 8 }}>
-          <label>Hieu luc (so ngay, de trong = vinh vien)</label><br />
+          <label>Hiệu lực (số ngày, để trống = vĩnh viễn)</label><br />
           <input type="number" value={validDays} onChange={(e) => setValidDays(e.target.value)} />
         </div>
         {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
-        <button type="submit">Cap API Key</button>
+        <button type="submit">Cấp API Key</button>
       </form>
 
       {newKeyValue && (
         <div style={{ background: '#fef9c3', padding: 12, borderRadius: 8, marginBottom: 24 }}>
-          <strong>Key vua tao (chi hien thi 1 lan, hay luu lai ngay):</strong>
+          <strong>Key vừa tạo (chỉ hiển thị 1 lần, hãy lưu lại ngay):</strong>
           <pre style={{ userSelect: 'all' }}>{newKeyValue}</pre>
         </div>
       )}
 
       {loading ? (
-        <p>Dang tai...</p>
+        <p>Đang tải...</p>
       ) : (
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ textAlign: 'left', borderBottom: '2px solid #333' }}>
-              <th>Doi tac</th>
+              <th>Đối tác</th>
               <th>Scopes</th>
-              <th>Trang thai</th>
-              <th>Het han</th>
-              <th>Thao tac</th>
+              <th>Trạng thái</th>
+              <th>Hết hạn</th>
+              <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
@@ -104,10 +104,10 @@ export default function ApiKeysPage() {
                 <td>{k.ownerName}</td>
                 <td>{k.scopes}</td>
                 <td style={{ color: k.status === 'ACTIVE' ? '#15803d' : '#b91c1c' }}>{k.status}</td>
-                <td>{k.expiresAt ? new Date(k.expiresAt).toLocaleDateString('vi-VN') : 'Vinh vien'}</td>
+                <td>{k.expiresAt ? new Date(k.expiresAt).toLocaleDateString('vi-VN') : 'Vĩnh viễn'}</td>
                 <td>
                   {k.status === 'ACTIVE' && (
-                    <button onClick={() => handleRevoke(k)}>Thu hoi</button>
+                    <button onClick={() => handleRevoke(k)}>Thu hồi</button>
                   )}
                 </td>
               </tr>

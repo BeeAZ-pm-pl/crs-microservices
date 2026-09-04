@@ -42,7 +42,7 @@ public class ApiKeyService {
 
     public void revoke(Long id) {
         ApiKey apiKey = apiKeyRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Khong tim thay API Key id = " + id));
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy API Key id = " + id));
         apiKey.setStatus(REVOKED);
         apiKeyRepository.save(apiKey);
     }
